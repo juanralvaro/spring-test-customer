@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product List</title>
+</head>
+<body>
+<h1>Listado clientes</h1>
+<a href="/customers/new">Crear nuevo cliente</a>
+<table id="customerList" th:if="${customers.size() > 0}">
+    <tr>
+        <th>ID</th>
+        <th>NOMBRE</th>
+        <th>APELLIDO</th>
+        <th>EMAIL</th>
+        <th>EDAD</th>
+        <th>ACCIONES</th>
+    </tr>
+    <tr th:each="customer: ${customers}">
+        <td th:text="${customer.id}"></td>
+        <td th:text="${customer.nombre}"></td>
+        <td th:text="${customer.apellido}"></td>
+        <td th:text="${customer.email}"></td>
+        <td th:text="${customer.edad}"></td>
+        <td>
+
+            <a th:href="@{/customers/{id}(id=${customer.id})}">Ver</a>
+            <a th:href="@{/customers/update/{id}(id=${customer.id})}">Editar</a>
+            <a th:href="@{/customers/delete/{id}(id=${customer.id})}">Borrar</a>
+        </td>
+    </tr>
+
+</table>
+<p th:if="${customers.size() == 0}">
+    No hay productos.
+</p>
+
+</body>
+</html>

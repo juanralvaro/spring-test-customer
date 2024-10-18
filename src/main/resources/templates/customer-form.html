@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Cliente</title>
+</head>
+<body>
+<h1 th:if="${customer.id}">Editar customer <span th:text="${customer.id}"></span></h1>
+<h1 th:unless="${customer.id}">Crear nuevo customer</h1>
+
+<form method="POST" th:object="${customer}" th:action="@{/customers}">
+
+    <input type="hidden" id="id" th:field="*{id}" />
+
+    <div>
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" th:field="*{nombre}" />
+    </div>
+    <div>
+        <label for="apellido">Apellido</label>
+        <input type="text" id="apellido" th:field="*{apellido}">
+    </div>
+    <div>
+        <label for="email">Email</label>
+        <input type="text" id="email" th:field="*{email}">
+    </div>
+    <div>
+        <label for="edad">Edad</label>
+        <input type="number" id="edad" th:field="*{edad}"/>
+    </div>
+
+    <button type="submit" th:if="${customer.id}">Guardar edición</button>
+    <button type="submit" th:unless="${customer.id}">Guardar creación</button>
+</form>
+
+</body>
+</html>

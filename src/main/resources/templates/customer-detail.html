@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de cliente</title>
+</head>
+<body>
+<h1>Detalle de cliente</h1>
+
+<div th:if="${customer}">
+    <div>
+        <label for="customer-id">ID:</label>
+        <span id="customer-id" th:text="${customer.id}"></span>
+    </div>
+
+    <div>
+        <label for="customer-nombre">Nombre:</label>
+        <span id="customer-nombre" th:text="${customer.nombre}"></span>
+    </div>
+
+    <div>
+        <label for="customer-apellido">Apellido:</label>
+        <span id="customer-apellido" th:text="${customer.apellido}"></span>
+    </div>
+
+    <div>
+        <label for="customer-email">Email:</label>
+        <span id="customer-email" th:text="${customer.email}"></span>
+    </div>
+
+    <div>
+        <label for="customer-edad">Edad:</label>
+        <span id="customer-edad" th:text="${customer.edad}"></span>
+    </div>
+</div>
+<div th:unless="${customer}">
+    <p>No existe el cliente</p>
+</div>
+
+<h3>Acciones</h3>
+<a th:href="@{/customers}">Volver al listado</a>
+<a th:if="${customer}" th:href="@{/customers/update/{id}(id=${customer.id})}">Editar</a>
+<a th:if="${customer}" th:href="@{/customers/delete/{id}(id=${customer.id})}">Borrar</a>
+
+
+</body>
+</html>
