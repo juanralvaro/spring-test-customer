@@ -2,13 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Formulario Cliente</title>
+    <title>Formulario de usuario</title>
 </head>
 <body>
-<h1 th:if="${customer.id}">Editar customer <span th:text="${customer.id}"></span></h1>
-<h1 th:unless="${customer.id}">Crear nuevo customer</h1>
+<h1 th:if="${usuario.id}">Editar usuario<span th:text="${usuario.id}"></span></h1>
+<h1 th:unless="${usuario.id}">Crear nuevo usuario</h1>
 
-<form method="POST" th:object="${customer}" th:action="@{/customers}">
+<form method="POST" th:object="${usuario}" th:action="@{/usuarios}">
 
     <input type="hidden" id="id" th:field="*{id}" />
 
@@ -29,8 +29,8 @@
         <input type="number" id="edad" th:field="*{edad}"/>
     </div>
 
-    <button type="submit" th:if="${customer.id}">Guardar edición</button>
-    <button type="submit" th:unless="${customer.id}">Guardar creación</button>
+    <button type="submit" th:if="${usuario.id}">Guardar edición</button>
+    <button type="submit" th:unless="${usuario.id}">Guardar creación</button>
 </form>
 
 </body>

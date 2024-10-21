@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de usuario</title>
+</head>
+<body>
+<h1>Detalle de usuario</h1>
+
+<div th:if="${usuario}">
+    <div>
+        <label for="usuario-id">ID:</label>
+        <span id="usuario-id" th:text="${usuario.id}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-nombre">Nombre:</label>
+        <span id="usuario-nombre" th:text="${usuario.nombre}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-apellido">Apellido:</label>
+        <span id="usuario-apellido" th:text="${usuario.apellido}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-email">Email:</label>
+        <span id="usuario-email" th:text="${usuario.email}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-edad">Edad:</label>
+        <span id="usuario-edad" th:text="${usuario.edad}"></span>
+    </div>
+</div>
+<div th:unless="${usuario}">
+    <p>No existe el usuario</p>
+</div>
+
+<h3>Acciones</h3>
+<a th:href="@{/usuarios}">Volver al listado</a>
+<a th:if="${usuario}" th:href="@{/usuarios/update/{id}(id=${usuario.id})}">Editar</a>
+<a th:if="${usuario}" th:href="@{/usuarios/delete/{id}(id=${usuario.id})}">Borrar</a>
+
+
+</body>
+</html>

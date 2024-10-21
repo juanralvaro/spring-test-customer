@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
-import jakarta.persistence.*;
 
 @Entity
 @Getter
@@ -14,7 +13,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @ToString
 @Builder
-public class Customer {
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

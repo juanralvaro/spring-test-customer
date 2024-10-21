@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.certidevs</groupId>
-	<artifactId>spring-003-mvc-mysql</artifactId>
+	<artifactId>proyecto-usuario</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-003-mvc-mysql</name>
 	<description>Demo project for Spring Boot</description>
