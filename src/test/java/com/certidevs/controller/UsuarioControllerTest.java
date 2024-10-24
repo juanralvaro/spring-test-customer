@@ -108,8 +108,38 @@ class UsuarioControllerTest {
     }
 
     @Test
-    void guardar() {
+    void guardarUsuarioNuevo() {
+
+        Usuario usuario = new Usuario();
+
+        String view = usuarioController.guardar(usuario);
+
+        assertEquals("redirect:/usuarios", view);
+        verify(usuarioRepository).save(usuario);
     }
+
+    @Test
+    void guardarUsuarioExistente() {
+
+        Usuario usuarioAActualizar = new Usuario();
+        usuarioAActualizar.setId(1L);
+        usuarioAActualizar.setNombre("Juan");
+
+        Usuario usuarioDesdeDB = new Usuario();
+        usuarioDesdeDB.setId(1L);
+        usuarioDesdeDB.setNombre("José");
+
+        Optional<Usuario> usuarioDesdeDBoptional = Optional.of(usuarioDesdeDB);
+        when(usuarioRepository.findById(1L)).thenReturn(usuarioDesdeDBoptional);
+
+        String view = usuarioController.guardar(usuarioAActualizar);
+
+        assertEquals("redirect:/usuarios", view);
+        verify(usuarioRepository).findById(1L);
+        verify(usuarioRepository).save(usuarioDesdeDB);
+        assertEquals("Juan", usuarioDesdeDB.getNombre());
+    }
+
 
     @Test
     void borrarPorId() {
