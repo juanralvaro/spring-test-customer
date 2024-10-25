@@ -15,23 +15,38 @@
     </div>
 
     <div>
+        <label for="usuario-nombreUsuario">Nombre de usuario:</label>
+        <span id="usuario-nombreUsuario" th:text="${usuario.nombreUsuario}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-password">Password:</label>
+        <span id="usuario-password" th:text="${usuario.password}"></span>
+    </div>
+
+    <div>
         <label for="usuario-nombre">Nombre:</label>
         <span id="usuario-nombre" th:text="${usuario.nombre}"></span>
     </div>
 
     <div>
-        <label for="usuario-apellido">Apellido:</label>
-        <span id="usuario-apellido" th:text="${usuario.apellido}"></span>
+        <label for="usuario-direccion">Dirección:</label>
+        <span id="usuario-direccion" th:text="${usuario.direccion}"></span>
     </div>
 
     <div>
-        <label for="usuario-email">Email:</label>
-        <span id="usuario-email" th:text="${usuario.email}"></span>
+        <label for="usuario-CP">Código postal:</label>
+        <span id="usuario-CP" th:text="${usuario.CP}"></span>
     </div>
 
     <div>
-        <label for="usuario-edad">Edad:</label>
-        <span id="usuario-edad" th:text="${usuario.edad}"></span>
+        <label for="usuario-dni">DNI:</label>
+        <span id="usuario-dni" th:text="${usuario.dni}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-fechaCreacion">Fecha de creación:</label>
+        <span id="usuario-fechaCreacion" th:text="${usuario.fechaCreacion}"></span>
     </div>
 </div>
 <div th:unless="${usuario}">

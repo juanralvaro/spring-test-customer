@@ -9,6 +9,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,30 +34,31 @@ class UsuarioControllerTest {
     @Test
     void encontrarTodos() {
 
-        Usuario usu1 = new Usuario().builder().id(1L).build();
-        Usuario usu2 = new Usuario().builder().id(2L).build();
-        List<Usuario> usuarios = List.of(usu1, usu2);
-        when(usuarioRepository.findAll()).thenReturn(usuarios);
+        when(usuarioRepository.findAll()).thenReturn(List.of(
+
+                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Date.from(Instant.now())).build(),
+                Usuario.builder().id(2L).nombreUsuario("Pedro").password("1234").nombre("Pedro").direccion("Calle 2").CP(12334).DNI("19797477M").fechaCreacion(Date.from(Instant.now())).build(),
+                Usuario.builder().id(3L).nombreUsuario("Carlos").password("1234").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Date.from(Instant.now())).build()
+        ));
 
         String view = usuarioController.encontrarTodos(model);
 
         assertEquals("usuario-list", view);
         verify(usuarioRepository).findAll();
-        verify(model).addAttribute("usuarios", usuarios);
 
     }
 
     @Test
     void encontrarPorIdCuandoExisteUsuario() {
 
-        Usuario juan = Usuario.builder().id(1L).nombre("Juan").build();
-        Optional<Usuario> juanOpt = Optional.of(juan);
-        when(usuarioRepository.findById(1L)).thenReturn(juanOpt);
+        Usuario juan = Usuario.builder().id(1L).nombreUsuario("Juan").build();
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(juan));
 
         String view = usuarioController.encontrarPorId((1L), model);
 
         assertEquals("usuario-detail", view);
         verify(usuarioRepository).findById(1L);
+        verify(usuarioRepository, never()).findAll();
         verify(model).addAttribute("usuario", juan);
     }
 
@@ -62,12 +67,27 @@ class UsuarioControllerTest {
 
         when(usuarioRepository.findById(1L)).thenReturn(Optional.empty());
 
-        String view = usuarioController.encontrarPorId((1L), model);
+        String view = usuarioController.encontrarPorId(1L, model);
 
         assertEquals("usuario-detail", view);
         verify(usuarioRepository).findById(1L);
         verify(model, never()).addAttribute(anyString(), any());
     }
+
+    @Test
+    void encontrarPorId2_siNoExisteUsuario() {
+
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.empty());
+
+        String view = usuarioController.encontrarPorId2(1L, model);
+
+        assertEquals("error", view);
+        verify(usuarioRepository).findById(1L);
+        verify(model, never()).addAttribute(eq("usuario"), any());
+        verify(model).addAttribute("mensaje", "Usuario no encontrado");
+    }
+
+
     @Test
     void formularioParaCrear() {
 
@@ -83,9 +103,8 @@ class UsuarioControllerTest {
     @Test
     void formularioParaActualizarSiExiste() {
 
-        Usuario juan = new Usuario().builder().id(1L).nombre("Juan").build();
-        Optional<Usuario> juanOpt = Optional.of(juan);
-        when(usuarioRepository.findById(1L)).thenReturn(juanOpt);
+        Usuario juan = new Usuario().builder().id(1L).nombreUsuario("Juan").build();
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(juan));
 
         String view = usuarioController.formularioParaActualizar((1L), model);
 
@@ -121,23 +140,18 @@ class UsuarioControllerTest {
     @Test
     void guardarUsuarioExistente() {
 
-        Usuario usuarioAActualizar = new Usuario();
-        usuarioAActualizar.setId(1L);
-        usuarioAActualizar.setNombre("Juan");
+        Usuario usuario = Usuario.builder().id(1L).nombre("Juan").build();
 
-        Usuario usuarioDesdeDB = new Usuario();
-        usuarioDesdeDB.setId(1L);
-        usuarioDesdeDB.setNombre("José");
+        Usuario usuarioActualizado = Usuario.builder().id(1L).nombre("José").build();
 
-        Optional<Usuario> usuarioDesdeDBoptional = Optional.of(usuarioDesdeDB);
-        when(usuarioRepository.findById(1L)).thenReturn(usuarioDesdeDBoptional);
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuario));
 
-        String view = usuarioController.guardar(usuarioAActualizar);
+        String view = usuarioController.guardar(usuarioActualizado);
 
         assertEquals("redirect:/usuarios", view);
         verify(usuarioRepository).findById(1L);
-        verify(usuarioRepository).save(usuarioDesdeDB);
-        assertEquals("Juan", usuarioDesdeDB.getNombre());
+        verify(usuarioRepository).save(usuario);
+        assertEquals(usuarioActualizado.getNombre(), usuario.getNombre());
     }
 
 
@@ -151,11 +165,35 @@ class UsuarioControllerTest {
     }
 
     @Test
+    void borrarPorId_ErrorCapturado() {
+
+        doThrow(new RuntimeException("Error al borrar"))
+                .when(usuarioRepository).deleteById(1L);
+
+        String view = usuarioController.borrarPorId(1L);
+
+        assertEquals("error", view);
+        verify(usuarioRepository).deleteById(1L);
+    }
+
+    @Test
     void borrarTodo() {
 
         String view = usuarioController.borrarTodo();
 
         assertEquals("redirect:/usuarios", view);
+        verify(usuarioRepository).deleteAll();
+    }
+
+    @Test
+    void borrarTodo_ErrorCapturado() {
+
+        doThrow(new RuntimeException("Error al borrar"))
+                .when(usuarioRepository).deleteAll();
+
+        String view = usuarioController.borrarTodo();
+
+        assertEquals("error", view);
         verify(usuarioRepository).deleteAll();
     }
 }

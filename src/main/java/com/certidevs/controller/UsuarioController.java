@@ -32,12 +32,26 @@ public class UsuarioController {
         return "usuario-detail";
     }
 
+    @GetMapping("usuarios2/{id}")
+    public String encontrarPorId2(@PathVariable Long id, Model model) {
+        return usuarioRepository.findById(id)
+                .map(usuario -> {
+                       model.addAttribute("usuario", usuario);
+                       return "usuario-detail";
+                })
+                .orElseGet(() -> {
+                    model.addAttribute("mensaje", "Usuario no encontrado");
+                    return "error";
+                });
+    }
+
     //http://localhost:8080/usuarios/new
     @GetMapping("usuarios/new")
     public String formularioParaCrear(Model model) {
         model.addAttribute("usuario", new Usuario());
         return "usuario-form";
     }
+
 
     //http://localhost:8080/usuarios/edit/3
     @GetMapping("usuarios/update/{id}")
@@ -62,13 +76,23 @@ public class UsuarioController {
 
     @GetMapping("usuarios/delete/{id}")
     public String borrarPorId(@PathVariable Long id) {
-        usuarioRepository.deleteById(id);
+        try {
+            usuarioRepository.deleteById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
         return "redirect:/usuarios";
     }
 
     @GetMapping("usuarios/deleteAll")
     public String borrarTodo() {
-        usuarioRepository.deleteAll();
+        try {
+            usuarioRepository.deleteAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
         return "redirect:/usuarios";
     }
 }

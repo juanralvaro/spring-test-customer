@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -18,9 +20,12 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String nombreUsuario;
+    private String password;
     private String nombre;
-    private String apellido;
-    private String email;
-    private Integer edad;
+    private String direccion;
+    private Integer CP;
+    private String DNI;
+    private Date fechaCreacion;
 
 }
